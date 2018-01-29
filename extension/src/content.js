@@ -1,11 +1,22 @@
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
     if (msg.command == "show_tabswitcher") {
         var $container = $("<div></div>",{id:"TabSwithcherContainer"});	       
-        function selectFirst(){
+        
+        function selectItem($item)
+        {
             var allTails = $container.find(".tab_tail");
             allTails.removeClass("selected");
-            allTails.filter(":visible:first").addClass("selected");
+            $item.addClass("selected")
         }
+        function selectFirst(){
+            var allTails = $container.find(".tab_tail")
+            var $firstVisible =  allTails.filter(":visible:first");
+            selectItem($firstVisible);
+        }
+        $container.on("mouseenter",".tab_tail", function(){
+            selectItem($(this));
+        });
+
         $("body").append($container);
         var $filter = $('<input type="text" />');
         $filter.on("input",function(){
