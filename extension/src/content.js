@@ -11,9 +11,12 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
         $filter.on("input",function(){
             var term =  $(this).val().toLowerCase();
             $container.find(".tab_tail").each(function(){
-                var isDisplayed = $(this).text().toLowerCase().indexOf(term) > -1;
+                var thisTabInfo = $(this).data("tabInfo");
+                var doesTitleContainTerm = thisTabInfo.title.toLowerCase().indexOf(term) > -1;
+                var doesUrlContainTerm = thisTabInfo.url.toLowerCase().indexOf(term) > -1;
+                var isDisplayed = doesTitleContainTerm || doesUrlContainTerm;
                 $(this).css({
-                    display: isDisplayed?"block":"none"
+                    display: isDisplayed ? "block" : "none"
                 });
             });
             setTimeout(selectFirst, 100);
@@ -51,10 +54,11 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
         
         msg.allTabs.forEach(function(tab){
             var $tab  = $("<div></div>");
+            $tab.data("tabInfo", tab);
             $tab.addClass("tab_tail")            
             var $tabImg = $("<img />", {src:tab.favIconUrl});           
             var $title = $("<div></div>",{text:tab.title})
-            $title .addClass("tab_tail_title");
+            $title.addClass("tab_tail_title");
             $tab.append($tabImg);
             $tab.append($title);          
             $tab.on("click", function(){
