@@ -24,6 +24,8 @@
     clear: both;
     padding: 10px 10px;
     cursor: pointer;
+    font-size: 12px;
+    line-height: 12px;
 }
 #TabSwithcherContainer .tab_tail img{
     width: 30px;
